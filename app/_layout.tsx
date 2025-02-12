@@ -1,30 +1,24 @@
-import { Tabs } from "expo-router";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { Button, View, Image } from "react-native";
+import { Text, View } from "react-native";
+import { Stack } from "expo-router";
 
-export default function TabsLayout() {
+export default function RootLayout() {
   return (
-    <Tabs>
-      {/* <Tabs.Screen name="index" options={{ headerShown: false }} /> */}
-      <Tabs.Screen
-        name="index"
+    <Stack>
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="URLInfoDetail"
         options={{
-          headerSearchBarOptions: {
-            placeholder: "Search url",
+          headerTitle: "Detail",
+          headerTitleStyle: {
+            fontSize: 22,
+            fontWeight: "heavy",
+            color: "#A1FAFF",
           },
-          headerLeft(props) {
-            return (
-              <View>
-                <Image
-                  source={require("./../assets/images/url-logo.png")}
-                  style={{ width: 40, height: 40, borderRadius: 40 / 2 }}
-                />
-              </View>
-            );
+          headerStyle: {
+            backgroundColor: "#158BBF",
           },
         }}
       />
-      <Tabs.Screen name="bitcoin" options={{ headerShown: false }} />
-    </Tabs>
+    </Stack>
   );
 }
