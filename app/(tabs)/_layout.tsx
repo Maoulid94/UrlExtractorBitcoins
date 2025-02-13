@@ -1,11 +1,11 @@
 import { Tabs } from "expo-router";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { StyleSheet } from "react-native";
+import { Alert, StyleSheet, TouchableOpacity } from "react-native";
 import { Button, View, Image } from "react-native";
 
 export default function TabsLayout() {
   return (
-    <Tabs>
+    <Tabs screenOptions={{ animation: "shift" }}>
       <Tabs.Screen
         name="index"
         options={{
@@ -24,12 +24,18 @@ export default function TabsLayout() {
           },
           headerRight(props) {
             return (
-              <Ionicons
-                name="add-circle-outline"
-                size={24}
-                color="black"
-                style={{ marginRight: 15 }}
-              />
+              <TouchableOpacity
+                onPress={() => {
+                  Alert.alert("Add Url!!!!");
+                }}
+              >
+                <Ionicons
+                  name="add-circle-outline"
+                  size={24}
+                  color="black"
+                  style={{ marginRight: 15 }}
+                />
+              </TouchableOpacity>
             );
           },
           headerLeft(props) {

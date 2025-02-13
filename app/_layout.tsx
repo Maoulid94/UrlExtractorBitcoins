@@ -12,7 +12,7 @@ export default function RootLayout() {
           headerTitleStyle: {
             fontSize: 22,
             fontWeight: "bold",
-            color: "#A1FAFF",
+            color: "white",
           },
           headerStyle: {
             backgroundColor: "#158BBF",

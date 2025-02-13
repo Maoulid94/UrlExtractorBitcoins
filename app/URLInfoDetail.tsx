@@ -1,5 +1,6 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { RouteProp, useRoute, useNavigation } from "@react-navigation/native";
+import { useState } from "react";
 import {
   Text,
   View,
@@ -12,6 +13,7 @@ import {
   TouchableOpacity,
   Button,
   Pressable,
+  ActivityIndicator,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -43,6 +45,7 @@ const OpenURL = ({ url }: { url: string }) => {
 export default function URLDetailScreen() {
   const route = useRoute<RouteProp<RootStackParamList, "URLDetail">>();
   const navigation = useNavigation();
+  const [loading, setLoading] = useState(false);
 
   if (!route.params || !route.params.item) {
     return (
@@ -55,13 +58,32 @@ export default function URLDetailScreen() {
   const { item } = route.params;
   const handleDelete = () => {
     Alert.alert("Are you sure you want to delete this URL?", undefined, [
-      { text: "concel", style: "cancel" },
+      { text: "Non", style: "cancel" },
       {
-        text: "destructive",
+        text: "Yes",
         style: "destructive",
-        onPress: () => {
-          console.log("Deleted: ", item.publicId);
-          navigation.goBack();
+        onPress: async () => {
+          setLoading(true);
+          try {
+            const response = await fetch(
+              `https://url-info-extractor.onrender.com/api/v1/urlinfo/detail/${item.publicId}`,
+              {
+                method: "DELETE",
+              }
+            );
+            if (!response.ok) {
+              throw new Error(
+                `The URL info does not exist: ${response.status}`
+              );
+            }
+            console.log("Deleted: ", item.publicId);
+            Alert.alert("Success", "The item has been deleted successfully.");
+            navigation.goBack();
+          } catch (error: any) {
+            Alert.alert("Error", `Failed to delete: ${error.message}`);
+          } finally {
+            setLoading(false);
+          }
         },
       },
     ]);
@@ -76,7 +98,7 @@ export default function URLDetailScreen() {
             <Text
               numberOfLines={1}
               ellipsizeMode="tail"
-              style={[styles.text, { width: "80%" }]}
+              style={[styles.text, { width: "90%" }]}
             >
               {item.url}
             </Text>
@@ -91,7 +113,7 @@ export default function URLDetailScreen() {
             ellipsizeMode="tail"
             style={[
               styles.text,
-              { fontWeight: 500, fontSize: 18, width: "80%" },
+              { fontWeight: 500, fontSize: 18, width: "90%" },
             ]}
           >
             {item.title}
@@ -139,7 +161,7 @@ export default function URLDetailScreen() {
         {item.images.length > 0 ? (
           <ScrollView
             horizontal={true}
-            showsHorizontalScrollIndicator={true}
+            showsHorizontalScrollIndicator={false}
             style={styles.imageScrollView}
           >
             {item.images.map((image, index) => (
@@ -149,9 +171,20 @@ export default function URLDetailScreen() {
             ))}
           </ScrollView>
         ) : null}
-        <View>
-          <Ionicons name="remove-circle-outline" size={50} />
-        </View>
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={handleDelete}
+          disabled={loading}
+        >
+          {loading ? (
+            <ActivityIndicator size={"small"} color={"white"} />
+          ) : (
+            <Image
+              source={require("./../assets/images/sup-icon.png")}
+              style={{ width: 35, height: 35, tintColor: "#158BBF" }}
+            />
+          )}
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -213,6 +246,18 @@ const styles = StyleSheet.create({
   imageScrollView: {
     marginTop: 10,
     flexDirection: "row",
+  },
+  deleteButton: {
+    backgroundColor: "#A1FAFF",
+    height: 70,
+    width: 70,
+    borderRadius: 35,
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    bottom: 0,
+    alignSelf: "center",
+    marginBottom: 15,
   },
   errorContainer: {
     flex: 1,

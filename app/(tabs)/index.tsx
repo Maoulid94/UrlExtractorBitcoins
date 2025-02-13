@@ -26,34 +26,43 @@ type RootStackParamList = {
 export default function URLInfoList() {
   const [urlInfo, setUrlInfo] = useState<URLData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefershing] = useState(false);
   const [error, setError] = useState<null | string>(null);
   const navigation =
     useNavigation<StackNavigationProp<RootStackParamList, "URLInfoDetail">>();
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log("Fetching data...");
-        const response = await fetch(
-          "https://url-info-extractor.onrender.com/api/v1/urlinfo"
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const data = await response.json();
-        if (Array.isArray(data)) {
-          setUrlInfo(data);
-        } else {
-          console.log("Unexpected data format");
-          setUrlInfo([]);
-        }
-      } catch (error: any) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
+  const fetchData = async () => {
+    try {
+      console.log("Fetching data...");
+      const response = await fetch(
+        "https://url-info-extractor.onrender.com/api/v1/urlinfo"
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-    };
+      const data = await response.json();
+      if (Array.isArray(data)) {
+        setUrlInfo(data);
+      } else {
+        console.log("Unexpected data format");
+        setUrlInfo([]);
+      }
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    onRefresh();
     fetchData();
   }, []);
+  // Refershing
+  const onRefresh = async () => {
+    setRefershing(true);
+    await fetchData();
+    setRefershing(false);
+  };
+
   if (loading) {
     return <ActivityIndicator size={"large"} color={"#0000ff"} />;
   }
@@ -106,7 +115,7 @@ export default function URLInfoList() {
                 style={[
                   styles.text,
                   {
-                    // fontWeight: 500,
+                    fontWeight: 500,
                     fontSize: 14,
                     backgroundColor: "#A1FAFF",
                     padding: 5,
@@ -120,7 +129,7 @@ export default function URLInfoList() {
                 style={[
                   styles.text,
                   {
-                    // fontWeight: 500,
+                    fontWeight: 500,
                     fontSize: 14,
                     backgroundColor: "#A1FAFF",
                     padding: 5,
@@ -133,6 +142,8 @@ export default function URLInfoList() {
             </View>
           </Pressable>
         )}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
       ></FlatList>
     </SafeAreaView>
   );
