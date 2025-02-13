@@ -15,7 +15,7 @@ export default function TabsLayout() {
             textAlign: "center",
             fontSize: 25,
             paddingLeft: 50,
-            fontWeight: "heavy",
+            fontWeight: "bold",
           },
           headerStyle: { backgroundColor: "#158BBF" },
           headerSearchBarOptions: {

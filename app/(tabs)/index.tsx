@@ -87,16 +87,11 @@ export default function URLInfoList() {
               </Text>
             </View>
             <View style={styles.boxContent}>
-              <Text style={[styles.text, { fontWeight: 500, fontSize: 18 }]}>
-                Title:
-              </Text>
+              <Text style={[styles.text, { fontSize: 18 }]}>Title:</Text>
               <Text
                 numberOfLines={1}
                 ellipsizeMode="tail"
-                style={[
-                  styles.text,
-                  { fontWeight: 500, fontSize: 18, width: "80%" },
-                ]}
+                style={[styles.text, { fontSize: 18, width: "80%" }]}
               >
                 {item.title}
               </Text>
@@ -104,18 +99,17 @@ export default function URLInfoList() {
             <View
               style={[
                 styles.boxContent,
-                { backgroundColor: "none", padding: 0 },
+                { backgroundColor: "transparent", padding: 0 },
               ]}
             >
               <Text
                 style={[
                   styles.text,
                   {
-                    fontWeight: 500,
+                    // fontWeight: 500,
                     fontSize: 14,
                     backgroundColor: "#A1FAFF",
-                    paddingHorizontal: 5,
-                    paddingVertical: 5,
+                    padding: 5,
                     borderRadius: 10,
                   },
                 ]}
@@ -126,11 +120,10 @@ export default function URLInfoList() {
                 style={[
                   styles.text,
                   {
-                    fontWeight: 500,
+                    // fontWeight: 500,
                     fontSize: 14,
                     backgroundColor: "#A1FAFF",
-                    paddingHorizontal: 5,
-                    paddingVertical: 5,
+                    padding: 5,
                     borderRadius: 10,
                   },
                 ]}
@@ -153,8 +146,7 @@ const styles = StyleSheet.create({
   item: {
     backgroundColor: "#158BBF",
     width: "100%",
-    height: 240,
-    justifyContent: "center",
+    height: 200,
     padding: 10,
     shadowOpacity: 0.3,
     shadowRadius: 4,
@@ -163,27 +155,26 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ddd",
     borderRadius: 12,
     borderWidth: 1,
-    marginTop: 10,
+    marginTop: 12,
   },
   boxContent: {
     display: "flex",
     flexDirection: "row",
     width: "100%",
-    height: 60,
     marginBottom: 10,
     justifyContent: "space-between",
-    alignItems: "center",
     backgroundColor: "#A1FAFF",
-    padding: 10,
+    // padding: 6,
     borderRadius: 10,
-    marginTop: 5,
   },
   text: {
     fontSize: 22,
     fontWeight: "bold",
     alignContent: "center",
+    justifyContent: "center",
     marginBottom: 10,
     color: "black",
+    padding: 4,
   },
   error: {
     fontSize: 18,

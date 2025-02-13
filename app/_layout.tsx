@@ -11,7 +11,7 @@ export default function RootLayout() {
           headerTitle: "Detail",
           headerTitleStyle: {
             fontSize: 22,
-            fontWeight: "heavy",
+            fontWeight: "bold",
             color: "#A1FAFF",
           },
           headerStyle: {

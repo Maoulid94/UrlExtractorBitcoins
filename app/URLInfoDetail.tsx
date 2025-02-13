@@ -1,5 +1,5 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { RouteProp, useRoute, useNavigation } from "@react-navigation/native";
 import {
   Text,
   View,
@@ -7,6 +7,11 @@ import {
   ScrollView,
   FlatList,
   Image,
+  Alert,
+  Linking,
+  TouchableOpacity,
+  Button,
+  Pressable,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -23,8 +28,21 @@ interface URLData {
   stylesheetCount: number;
 }
 
+const OpenURL = ({ url }: { url: string }) => {
+  const handlePress = async () => {
+    const isSupported = await Linking.canOpenURL(url);
+    if (isSupported) {
+      await Linking.openURL(url);
+    } else {
+      Alert.alert(`Cannot open this Url: ${url}`);
+    }
+  };
+  return <Button title="Open Link" onPress={handlePress} />;
+};
+
 export default function URLDetailScreen() {
   const route = useRoute<RouteProp<RootStackParamList, "URLDetail">>();
+  const navigation = useNavigation();
 
   if (!route.params || !route.params.item) {
     return (
@@ -35,19 +53,34 @@ export default function URLDetailScreen() {
     );
   }
   const { item } = route.params;
+  const handleDelete = () => {
+    Alert.alert("Are you sure you want to delete this URL?", undefined, [
+      { text: "concel", style: "cancel" },
+      {
+        text: "destructive",
+        style: "destructive",
+        onPress: () => {
+          console.log("Deleted: ", item.publicId);
+          navigation.goBack();
+        },
+      },
+    ]);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.cardContent}>
         <View style={[styles.boxContent, { marginTop: 20 }]}>
           <Ionicons name="link-outline" size={40} color="blue" />
-          <Text
-            numberOfLines={1}
-            ellipsizeMode="tail"
-            style={[styles.text, { width: "80%" }]}
-          >
-            {item.url}
-          </Text>
+          <TouchableOpacity onPress={() => Linking.openURL(item.url)}>
+            <Text
+              numberOfLines={1}
+              ellipsizeMode="tail"
+              style={[styles.text, { width: "80%" }]}
+            >
+              {item.url}
+            </Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.boxContent}>
           <Text style={[styles.text, { fontWeight: 500, fontSize: 18 }]}>
@@ -116,6 +149,9 @@ export default function URLDetailScreen() {
             ))}
           </ScrollView>
         ) : null}
+        <View>
+          <Ionicons name="remove-circle-outline" size={50} />
+        </View>
       </View>
     </SafeAreaView>
   );
