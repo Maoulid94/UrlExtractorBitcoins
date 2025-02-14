@@ -93,12 +93,19 @@ export default function URLDetailScreen() {
     <SafeAreaView style={styles.container}>
       <View style={styles.cardContent}>
         <View style={[styles.boxContent, { marginTop: 20 }]}>
-          <Ionicons name="link-outline" size={40} color="blue" />
+          <Ionicons name="link-outline" size={40} color="#158BBF" />
           <TouchableOpacity onPress={() => Linking.openURL(item.url)}>
             <Text
-              numberOfLines={1}
+              numberOfLines={2}
               ellipsizeMode="tail"
-              style={[styles.text, { width: "90%" }]}
+              style={[
+                styles.text,
+                {
+                  width: "80%",
+                  textDecorationLine: "underline",
+                  color: "blue",
+                },
+              ]}
             >
               {item.url}
             </Text>
@@ -109,11 +116,11 @@ export default function URLDetailScreen() {
             Title:
           </Text>
           <Text
-            numberOfLines={1}
+            numberOfLines={2}
             ellipsizeMode="tail"
             style={[
               styles.text,
-              { fontWeight: 500, fontSize: 18, width: "90%" },
+              { fontWeight: 500, fontSize: 18, width: "80%" },
             ]}
           >
             {item.title}
@@ -212,7 +219,8 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 60,
     marginBottom: 10,
-    justifyContent: "space-between",
+    // justifyContent: "space-between",
+    gap: 16,
     alignItems: "center",
     backgroundColor: "#A1FAFF",
     padding: 10,

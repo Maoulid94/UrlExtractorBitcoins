@@ -85,60 +85,69 @@ export default function URLInfoList() {
               navigation.navigate("URLInfoDetail", { item });
             }}
           >
-            <View style={styles.boxContent}>
-              <Text style={styles.text}>URL:</Text>
-              <Text
-                numberOfLines={1}
-                ellipsizeMode="tail"
-                style={[styles.text, { width: "80%" }]}
-              >
-                {item.url}
-              </Text>
-            </View>
-            <View style={styles.boxContent}>
-              <Text style={[styles.text, { fontSize: 18 }]}>Title:</Text>
-              <Text
-                numberOfLines={1}
-                ellipsizeMode="tail"
-                style={[styles.text, { fontSize: 18, width: "80%" }]}
-              >
-                {item.title}
-              </Text>
-            </View>
-            <View
-              style={[
-                styles.boxContent,
-                { backgroundColor: "transparent", padding: 0 },
-              ]}
-            >
-              <Text
+            <View style={{ marginTop: 12 }}>
+              <View style={styles.boxContent}>
+                <Text style={styles.text}>URL:</Text>
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={[
+                    styles.text,
+                    {
+                      width: "80%",
+                      textDecorationLine: "underline",
+                      color: "blue",
+                    },
+                  ]}
+                >
+                  {item.url}
+                </Text>
+              </View>
+              <View style={styles.boxContent}>
+                <Text style={[styles.text, { fontSize: 18 }]}>Title:</Text>
+                <Text
+                  numberOfLines={1}
+                  ellipsizeMode="tail"
+                  style={[styles.text, { fontSize: 18, width: "80%" }]}
+                >
+                  {item.title}
+                </Text>
+              </View>
+              <View
                 style={[
-                  styles.text,
-                  {
-                    fontWeight: 500,
-                    fontSize: 14,
-                    backgroundColor: "#A1FAFF",
-                    padding: 5,
-                    borderRadius: 10,
-                  },
+                  styles.boxContent,
+                  { backgroundColor: "transparent", padding: 0 },
                 ]}
               >
-                Number of Images: {item.images.length}
-              </Text>
-              <Text
-                style={[
-                  styles.text,
-                  {
-                    fontWeight: 500,
-                    fontSize: 14,
-                    backgroundColor: "#A1FAFF",
-                    padding: 5,
-                    borderRadius: 10,
-                  },
-                ]}
-              >
-                Number of Styles: {item.stylesheetCount}
-              </Text>
+                <Text
+                  style={[
+                    styles.text,
+                    {
+                      fontWeight: 500,
+                      fontSize: 14,
+                      backgroundColor: "#A1FAFF",
+                      padding: 5,
+                      borderRadius: 10,
+                    },
+                  ]}
+                >
+                  Number of Images: {item.images.length}
+                </Text>
+                <Text
+                  style={[
+                    styles.text,
+                    {
+                      fontWeight: 500,
+                      fontSize: 14,
+                      backgroundColor: "#A1FAFF",
+                      padding: 5,
+                      borderRadius: 10,
+                    },
+                  ]}
+                >
+                  Number of Styles: {item.stylesheetCount}
+                </Text>
+              </View>
             </View>
           </Pressable>
         )}
