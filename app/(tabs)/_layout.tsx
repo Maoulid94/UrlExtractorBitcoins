@@ -9,7 +9,7 @@ import {
   Image,
   Text,
   TextInput,
-  ActivityIndicator,
+  // ActivityIndicator,
   FlatList,
 } from "react-native";
 import { useState, useEffect } from "react";
