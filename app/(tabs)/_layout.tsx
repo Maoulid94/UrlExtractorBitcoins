@@ -9,10 +9,11 @@ import {
   Image,
   Text,
   TextInput,
-  // ActivityIndicator,
+  ActivityIndicator,
   FlatList,
+  Pressable,
 } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Icon } from "react-native-vector-icons/Icon";
 
@@ -69,6 +70,9 @@ export default function TabsLayout() {
     } catch (error) {
       Alert.alert("Network error:", (error as Error).message);
     }
+    if (loading) {
+      return <ActivityIndicator size={"large"} color={"green"} />;
+    }
   };
 
   useEffect(() => {
@@ -95,13 +99,25 @@ export default function TabsLayout() {
     fetchData();
   }, []);
 
-  const handleFilter = (item_fliter: string) => {
-    const fliter_data = data.filter(
-      (item) =>
-        item.url.toLowerCase().includes(item_fliter.toLowerCase()) ||
-        item.title.toLowerCase().includes(item_fliter.toLowerCase())
-    );
-    setFiltered(fliter_data);
+  const handleFilter = (query: string) => {
+    if (query.trim() === "") {
+      setFiltered([]);
+      return;
+    }
+    const filterSearch = (item_fliter: string) => {
+      const fliter_data = data.filter(
+        (item) =>
+          item.url.toLowerCase().includes(item_fliter.toLowerCase()) ||
+          item.title.toLowerCase().includes(item_fliter.toLowerCase())
+      );
+      setFiltered(fliter_data);
+    };
+  };
+
+  const inputRef = useRef<TextInput>(null);
+  const handleFocusAndClear = () => {
+    inputRef.current?.clear();
+    inputRef.current?.focus();
   };
 
   return (
@@ -141,7 +157,11 @@ export default function TabsLayout() {
                     style={{ marginRight: 15 }}
                   />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => setSearchModalVisible(true)}>
+                <TouchableOpacity
+                  onPress={() => {
+                    setSearchModalVisible(true);
+                  }}
+                >
                   <Ionicons name="search" size={24} color={"black"} />
                 </TouchableOpacity>
               </View>
@@ -152,12 +172,14 @@ export default function TabsLayout() {
                 onRequestClose={() => {
                   setSearchModalVisible(false);
                 }}
+                onShow={handleFocusAndClear}
               >
                 <View style={styles.searchModalContent}>
                   <View style={styles.searchModalTextInputBox}>
                     <Ionicons name="search" size={24} />
                     <TextInput
                       style={styles.searchModalTextInput}
+                      ref={inputRef}
                       placeholder="Search by URL or Title..."
                       value={searchItem}
                       onChangeText={(text) => {
@@ -165,18 +187,28 @@ export default function TabsLayout() {
                         handleFilter(text);
                       }}
                     />
-                    <Icon name="cancel" size={24} />
-                  </View>
-                  <FlatList
-                    data={filtered}
-                    keyExtractor={(item) => item.publicId.toString()}
-                    renderItem={({ item }) => (
-                      <View style={{ padding: 10 }}>
-                        <Text>{item.title}</Text>
-                        <Text>{item.url}</Text>
-                      </View>
+                    {searchItem.length > 0 && (
+                      <Pressable onPress={() => setSearchModalVisible(false)}>
+                        <Image
+                          source={require("../../assets/images/cancel.png")}
+                          style={{ width: 14, height: 14 }}
+                        />
+                      </Pressable>
                     )}
-                  />
+                  </View>
+                  {searchItem.length > 0 && (
+                    <FlatList
+                      style={styles.serachModalList}
+                      data={filtered}
+                      keyExtractor={(item) => item.publicId.toString()}
+                      renderItem={({ item }) => (
+                        <View style={{ padding: 10 }}>
+                          <Text>{item.title}</Text>
+                          <Text>{item.url}</Text>
+                        </View>
+                      )}
+                    />
+                  )}
                 </View>
               </Modal>
               {/* add */}
@@ -185,11 +217,13 @@ export default function TabsLayout() {
                 transparent={true}
                 visible={addModalVisible}
                 onRequestClose={() => setAddModalVisible(false)}
+                onShow={handleFocusAndClear}
               >
                 <View style={styles.addModalContent}>
                   <View style={styles.addModalBox}>
                     <Text style={styles.addModalText}>Add a new URL</Text>
                     <TextInput
+                      ref={inputRef}
                       placeholder="Enter the URL"
                       style={styles.addModalTextInput}
                       value={url}
@@ -311,26 +345,30 @@ const styles = StyleSheet.create({
   searchModalContent: {
     flex: 1,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-    // width: "100%",
   },
   searchModalTextInputBox: {
     display: "flex",
+    height: 50,
     flexDirection: "row",
-    justifyContent: "center",
     alignItems: "center",
     width: "95%",
-    backgroundColor: "yellow",
-  },
-  searchModalTextInput: {
-    height: 40,
-    width: "80%",
-    borderColor: "#ccc",
-    color: "white",
-    borderWidth: 1,
     backgroundColor: "#158BBF",
     marginVertical: 10,
     marginHorizontal: 8,
     paddingHorizontal: 10,
     borderRadius: 12,
+  },
+  searchModalTextInput: {
+    height: 50,
+    width: "80%",
+    borderColor: "#ccc",
+    color: "white",
+    marginVertical: 10,
+    marginHorizontal: 8,
+    paddingHorizontal: 10,
+  },
+  serachModalList: {
+    marginHorizontal: 8,
+    marginBottom: 20,
   },
 });

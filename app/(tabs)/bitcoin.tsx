@@ -93,7 +93,7 @@ export default function BitcoinUrl() {
             <Text style={styles.text}>GBP</Text>
           </View>
           <View style={styles.exchangeText}>
-            <Text style={styles.text}>Amount:</Text>
+            <Text style={styles.text}>Exchange Rate:</Text>
             <Text style={styles.text}>{bitcoin.eur_to_gbp.toFixed(2)}</Text>
             <Ionicons name="logo-euro" size={18} color="#FF6B08" />
           </View>

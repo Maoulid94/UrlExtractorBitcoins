@@ -184,7 +184,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     justifyContent: "space-between",
     backgroundColor: "#A1FAFF",
-    // padding: 6,
     borderRadius: 10,
   },
   text: {
